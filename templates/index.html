@@ -1,0 +1,47 @@
+<html>
+
+<head>
+    <title>regexBible</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    <h1>regexBible</h1>
+    <p>Search the Bible using <a href="https://regexr.com/">Regular Expressions</a>. This uses <a href="https://docs.python.org/3.5/library/re.html#re.search>">Python 3.5's re library</a> to perform the search.</p>
+
+    <form id="searchBox" target="_parent">
+        <input name="search" id="searchInput" type="text" placeholder="(\w+) search \w*"/>
+        <input type="submit" value="Search"/>
+    </form>
+
+    <div id="results"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <script>
+        $("#searchBox").submit(function (event) {
+            event.preventDefault()
+            // clear results
+            $("#results").html("");
+
+            var text = $("#searchInput").val();
+            console.log("Searching for: " + text);
+
+            $.ajax({
+                url: "{{ url_for('search') }}",
+                type: "get",
+                data: {regex: text},
+                success: function (response) {
+                    $("#results").html(response);
+                },
+                error: function (xhr) {
+                    console.log(error)
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+<div id="search_results_list">
+    {% for resultVerse in search_results %}
+        <div class="search_result">
+            {{ resultVerse["reference"] }}
+            ({{ resultVerse["translation_id"] }})
+        </div>
+        <div>
+            {{ resultVerse["text"] }}
+        </div>
+        </br>
+    {% endfor %}
+</div>
