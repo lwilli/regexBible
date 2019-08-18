@@ -1,0 +1,15 @@
+{
+  "name": "regexBible",
+  "description": "Search the Bible using Regular Expressions.",
+  "image": "heroku/python",
+  "repository": "https://github.com/lwilli/regexBible",
+  "keywords": ["python", "flask"],
+  "addons": [],
+  "env": {},
+  "environments": {
+    "test": {
+      "scripts": {
+      }
+    }
+  }
+}

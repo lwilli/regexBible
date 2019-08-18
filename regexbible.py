@@ -2,10 +2,10 @@ import json
 from flask import Flask, render_template, request, jsonify
 from parse_json_bible import regex_search_bibles
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='./templates')
 
 ERROR_TEMPLATE = "search_results_error.html"
-RESULTS_TEMPLATE = "search_results.hml"
+RESULTS_TEMPLATE = "search_results.html"
 
 @app.route("/")
 def index():
@@ -28,3 +28,7 @@ def search():
         return render_template(RESULTS_TEMPLATE, search_results=results, result_count=len(results))
     else:
         return render_template(ERROR_TEMPLATE, error="Your search did not match any verses in the translations " + ", ".join(translations_to_search) + ".")
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
