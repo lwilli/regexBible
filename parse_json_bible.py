@@ -52,9 +52,10 @@ def regex_search_bibles(versionsToSearch, searchPattern):
 
     for version in versionsToSearch:
         bibleToSearch = None
-        if version.lower() == "kjv":
+        strippedLoweredVersion = version.lower().strip()
+        if strippedLoweredVersion == "kjv":
             bibleToSearch = KJV_JSON
-        elif version.lower() == "asv":
+        elif strippedLoweredVersion == "asv":
             bibleToSearch = ASV_JSON
 
         for verseDict in bibleToSearch:

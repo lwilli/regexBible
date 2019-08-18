@@ -1,0 +1,33 @@
+.fixed-footer {
+    padding: 1rem 1.5rem 1rem;
+}
+
+.section {
+	padding-top: 2.0rem;
+	padding-bottom: 2rem;
+}
+
+#search-control {
+	max-width: 600px;
+}
+
+#results-container {
+	padding-top: 1.5rem;
+}
+
+#search_results_content {
+	max-width: 800px;
+}
+
+
+/* Settings for sticky footer */
+
+body {
+    display: flex;
+    min-height: 100vh;
+	flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}

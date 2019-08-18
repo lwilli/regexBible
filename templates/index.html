@@ -1,45 +1,123 @@
+<!DOCTYPE html>
 <html>
 
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>regexBible</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
-<body>
+<body class="has-background-light">
+    <header>
+        <section class="hero">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">regexBible</h1>
+                    <h3 class="subtitle">
+                        Search the Bible using <a href="https://regexr.com/">Regular Expressions</a>.
+                    </h3>
+                </div>
+            </div>
+        </section>
+    </header>
 
-    <h1>regexBible</h1>
-    <p>Search the Bible using <a href="https://regexr.com/">Regular Expressions</a>. This uses <a href="https://docs.python.org/3.5/library/re.html#re.search>">Python 3.5's re library</a> to perform the search.</p>
+    <main class="has-background-white">
+        <section class="section has-background-white">
+            <div class="container is-fluid">
+                <div class="field has-addons has-addons-centered" id="searchBox">
+                    <div class="control is-expanded" id="search-control">
+                        <input class="input" name="search" id="searchInput" type="text" placeholder="Search the Bible" autofocus>
+                    </div>
+                    <!-- Versions selecting doesn't work so well with multi-select:
+                     <div class="control">
+                        <div class="select is-multiple">
+                          <select multiple size="3" name="Versions">
+                            <option value="NIV">NIV</option>
+                            <option value="KJV">KJV</option>
+                            <option value="ESV">ESV</option>
+                          </select>
+                        </div>
+                    </div> -->
+                    <div class="control">
+                        <a class="button">
+                          <label class="checkbox" name="version">
+                            <input type="checkbox" checked>
+                            KJV
+                          </label>
+                        </a>
+                    </div>
+                    <div class="control">
+                        <a class="button">
+                          <label class="checkbox" name="version">
+                            <input type="checkbox" checked>
+                            ASV
+                          </label>
+                        </a>
+                    </div>
+                    <div class="control">
+                        <a class="button is-info" onclick="runSearch()">Search</a>
+                    </div>
+                </div>
+            </div>
 
-    <form id="searchBox" target="_parent">
-        <input name="search" id="searchInput" type="text" placeholder="(\w+) search \w*"/>
-        <input type="submit" value="Search"/>
-    </form>
+            <div class="container is-fluid has-text-centered" id="results-container">
+            </div>
+        </section>
+    </main>
 
-    <div id="results"></div>
+    <footer class="footer fixed-footer has-background-light">
+      <div class="has-text-centered">
+        <p>regexBible uses <a href="https://docs.python.org/3.5/library/re.html#re.search>">Python 3.5's re library</a> to search the Bible.</p>
+        <p>Made with ❤️ by <a href="https://lwilli.github.io">Logan Williams</a>.</p>
+      </div>
+    </footer>
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
     <script>
-        $("#searchBox").submit(function (event) {
-            event.preventDefault()
-            // clear results
+        function runSearch() {
             $("#results").html("");
 
             var text = $("#searchInput").val();
-            console.log("Searching for: " + text);
+            var selectedVersions = getSelectedVersions();
+
+            console.log("Searching " + selectedVersions + " for: " + text);
 
             $.ajax({
                 url: "{{ url_for('search') }}",
                 type: "get",
-                data: {regex: text},
+                data: {regex: text, versions: JSON.stringify(selectedVersions)},
                 success: function (response) {
-                    $("#results").html(response);
+                    $("#results-container").html(response);
                 },
                 error: function (xhr) {
                     console.log(error)
                 }
             });
-        });
+        };
+
+        function getSelectedVersions() {
+            var selectedVersions = [];
+            var allVersions = $('[name="version"]');
+            for (var i = 0; i < allVersions.length; i++) {
+                var version = allVersions[i];
+                if (version.childNodes[1].checked) {
+                    selectedVersions.push(version.innerText);
+                }
+            }
+            return selectedVersions;
+        }
+
+        document.getElementById('searchInput').onkeydown = function(event) {
+            if (event.keyCode == 13) { //enter
+                runSearch();
+            }
+        };
     </script>
 
 </body>
